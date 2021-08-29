@@ -2,11 +2,6 @@ package main
 
 import "fmt"
 
-type Token struct {
-	Nature string
-	Value string
-}
-
 func lexer(toAnalyse string) []Token {
 	toReturn := make([]Token, 0) // Le slice qui va être renvoyée, contenant les tokens obtenus grâce au lexer.
 	toMakeANumber := make([]string, 0) // Le slice qui va permettre à la fonction makeNumber de créer un nombre.
