@@ -1,10 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func lexer(toAnalyse string) []Token {
+func lexer(toAnalyse string) ([]Token, error) {
 	toReturn := make([]Token, 0) // Le slice qui va être renvoyée, contenant les tokens obtenus grâce au lexer.
 	toMakeANumber := make([]string, 0) // Le slice qui va permettre à la fonction makeNumber de créer un nombre.
+	var err error = nil
 
 	for i, charAnalysedShadowed := range toAnalyse {
 
@@ -76,17 +79,19 @@ func lexer(toAnalyse string) []Token {
 				toReturn = append(toReturn, currentToken)
 				break
 			case charAnalysed == "(":
-				currentToken.Nature = "BRACKET"
+				currentToken.Nature = "BRACKET_OPEN"
 				currentToken.Value = "("
 				toReturn = append(toReturn, currentToken)
 				break
 			case charAnalysed == ")":
-				currentToken.Nature = "BRACKET"
+				currentToken.Nature = "BRACKET_CLOSE"
 				currentToken.Value = ")"
 				toReturn = append(toReturn, currentToken)
 				break
 			default:
-				fmt.Printf("Warning : The character %d is invalid, omitting.", i+1)
+				err = fmt.Errorf("character %d is invalid, omitting", i+1)
+				IfError(err)
+				err = nil
 				break
 			}
 		}
@@ -98,5 +103,5 @@ func lexer(toAnalyse string) []Token {
 			toReturn = append(toReturn[:i], toReturn[i+1])
 		}
 	}
-	return toReturn
+	return toReturn, err
 }

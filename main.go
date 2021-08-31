@@ -16,14 +16,12 @@ func main() {
 	for true {
 		fmt.Printf("Calculator > ")
 		toDisplay, err := collectUserInput()
-		if err != nil {
-			fmt.Println("An error occured. Error :", err)
-			continue
-		}
+		IfError(err)
 		if toDisplay == "exit" {
 			break
 		}
-		var toParse []Token = lexer(toDisplay)
+		toParse, err2 := lexer(toDisplay)
+		IfError(err2)
 		fmt.Println(toParse)
 	}
 }
@@ -33,11 +31,15 @@ func collectUserInput() (string, error) {
 	userInput := ""
 	var err error = nil
 	fmt.Scanln(&userInput, &err)
-	if err != nil {
-		return "ERROR", err
-	}
-	if err == nil && userInput == "" {
+	IfError(err)
+	if userInput == "" {
 		err = errors.New("empty entry, nothing were entred")
 	}
 	return userInput, err
+}
+
+func IfError(err error) () {
+	if err != nil {
+		fmt.Println("An error occured. Error :", err)
+	}
 }
